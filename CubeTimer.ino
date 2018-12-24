@@ -1,9 +1,20 @@
+#include "src/ScrambleTools.h"
+
+/* Settings */
+#define scrSize 20 //Define scramble size fo 3x3
+/* End Settings */
+
+Scrambles newScr;
+
 void setup() {
-  // put your setup code here, to run once:
+  Serial.begin(115200);
+    randomSeed(analogRead(0));
 
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  delay(10000);
+  Serial.println(newScr.getScramble(scrSize));
+
 
 }
