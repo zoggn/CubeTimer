@@ -5,18 +5,29 @@
 
 class Scrambles {
   
-	String moves[18] =  {"U","L","F","R","B","D", 
-					  "U'", "L'", "F'", "R'", "B'", "D'", 
-					  "U2","L2","F2","R2","B2", "D2"};
+  	int randMove = 0; //need to store random number -_-
+  	int randPow = 0; //need to store random alg pow -_- x2
+  	int previousMove,previousPow;
+
+  	String moves[6] = {"R","L","U","D","F","B"};
+  	String ALG_POWES[3] = {"","'","2"};
 
 	public: String getScramble(int scrSize){
-		int i = 0;
+		int previousIndex; //previous move
 		String scramble = "";
 
+		int i = 0;
 		while(i < scrSize){
-      int randNumber = random(17);
-			scramble += moves[randNumber] + ' ';
-			i++; 
+      		randMove = random(5);
+      		delay(50); //need for prevent the same numbers
+      		randPow = random(2);
+
+      		if(previousMove == randMove){
+      			randMove = random(5);
+      		}
+      		scramble += moves[randMove] + ALG_POWES[randPow] + ' ';
+      		previousMove = randMove;
+      		i++;
 		}
 
 		return scramble;
