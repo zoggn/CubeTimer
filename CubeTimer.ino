@@ -25,7 +25,8 @@
 
   GButton butt1(firstButt);
   GButton butt2(secondButt);
-  
+
+  #define NODEMCU
 /* End */
 
 /* Disp Settings */
@@ -35,8 +36,14 @@
 void setup() {
   Serial.begin(115200);
 
+#ifdef NODEMCU
   attachInterrupt(digitalPinToInterrupt(firstButt), isr, CHANGE);
   attachInterrupt(digitalPinToInterrupt(secondButt), isr, CHANGE);
+#else
+  attachInterrupt(firstButt, isr, CHANGE);
+  attachInterrupt(secondButt, isr, CHANGE);
+#endif
+  
 
   butt1.setDebounce(25);
   butt2.setDebounce(25);
