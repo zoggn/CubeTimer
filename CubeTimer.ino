@@ -11,6 +11,12 @@
 /* Timer variables */
    int timerMode = 0;
 
+   unsigned long msTime=0; // время интервала, милисекунды  
+   int secTime = 0;
+   byte  minTime=0;  // время интервала, минуты
+   byte  decMinTime=0;  // время интервала, десятки минуты
+   unsigned long prevTime;  // предыдущее значение времени 
+   unsigned long curentTime;  // текущее значение времени
 /* End */
 
 /* Misc definitions */
@@ -45,8 +51,33 @@ void loop() {
       timerMode = 0;     
     }
   }
-    
-  Serial.println(timerMode);
+  
+  /*if(butt1.isDouble() == true){
+    msTime = 0;
+    secTime = 0;
+    minTime = 0;
+    decMinTime = 0;
+  }*/
+
+  if ( timerMode == 0 ) {
+    prevTime= millis();
+  }
+  else {  
+    curentTime = millis();
+    msTime += curentTime - prevTime; 
+    if ( msTime > 999 ) {  
+      msTime -= 1000;
+      secTime ++; 
+      if ( secTime > 59 ) {
+        secTime -= 60;
+        minTime ++;
+      }      
+    }                
+    prevTime= curentTime;
+  }
+
+
+   Serial.print(secTime);Serial.print(".");Serial.println(msTime);
 }
 
 void isr(){
