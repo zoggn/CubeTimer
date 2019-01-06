@@ -1,3 +1,5 @@
+#include <GyverButton.h>
+
 #include "src/ScrambleTools.h"
 
 /* Scramble settings */
@@ -7,16 +9,17 @@
 
 
 /* Timer variables */
-  boolean statusFlag = false;
+   int timerMode = 0;
 
 /* End */
 
-
-
 /* Misc definitions */
-  #define firstButt 16
-  #define secondButt 5
-  boolean buttonState = false;
+  #define firstButt 5
+  #define secondButt 4
+
+  GButton butt1(firstButt);
+  GButton butt2(secondButt);
+  
 /* End */
 
 /* Disp Settings */
@@ -25,13 +28,28 @@
 /* End */
 void setup() {
   Serial.begin(115200);
-    //randomSeed(analogRead(0));
-  pinMode(firstButt,INPUT_PULLUP);
-  pinMode(secondButt,INPUT_PULLUP);
+
+  attachInterrupt(digitalPinToInterrupt(firstButt), isr, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(secondButt), isr, CHANGE);
+
+  butt1.setDebounce(25);
+  butt2.setDebounce(25);
+  
 }
 
-void loop() {
-  delay(5000);
+void loop() {   
+  if ( butt1.isPress() == true && butt2.isPress() == true ) {
+    if ( timerMode == 0) {
+      timerMode = 1;
+    } else {     
+      timerMode = 0;     
+    }
+  }
+    
+  Serial.println(timerMode);
+}
 
-
+void isr(){
+  butt1.tick();
+  butt2.tick();
 }
