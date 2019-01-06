@@ -83,8 +83,11 @@ void loop() {
     prevTime= curentTime;
   }
 
-
-   Serial.print(secTime);Serial.print(".");Serial.println(msTime);
+   if(minTime < 1){
+      Serial.print(secTime);Serial.print(".");Serial.println(msTime);
+   } else {
+      Serial.print(minTime);Serial.print(":");Serial.print(secTime);Serial.print(".");Serial.println(msTime);
+   }
 }
 
 void isr(){
