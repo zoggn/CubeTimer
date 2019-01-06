@@ -1,3 +1,5 @@
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
 #include <GyverButton.h>
 
 #include "src/ScrambleTools.h"
@@ -30,8 +32,10 @@
 /* End */
 
 /* Disp Settings */
-  #define SDA 4
-  #define SCL 0
+  #define SDA 0
+  #define SCL 2
+
+  LiquidCrystal_I2C lcd(0x27, 16, 2);
 /* End */
 void setup() {
   Serial.begin(115200);
@@ -43,11 +47,12 @@ void setup() {
   attachInterrupt(firstButt, isr, CHANGE);
   attachInterrupt(secondButt, isr, CHANGE);
 #endif
-  
-
   butt1.setDebounce(25);
   butt2.setDebounce(25);
-  
+
+  Wire.begin(SDA,SCL);
+  lcd.begin();
+  lcd.backlight();
 }
 
 void loop() {   
@@ -88,6 +93,14 @@ void loop() {
    } else {
       Serial.print(minTime);Serial.print(":");Serial.print(secTime);Serial.print(".");Serial.println(msTime);
    }
+   
+    lcd.setCursor(0,0);
+   if(minTime < 1){
+      lcd.print(secTime);lcd.print(".");lcd.print(msTime);
+   } else {
+      lcd.print(minTime);lcd.print(":");lcd.print(secTime);lcd.print(".");lcd.print(msTime);
+   }
+   
 }
 
 void isr(){
