@@ -18,12 +18,14 @@ class Scrambles {
 
 		int i = 0;
 		while(i < scrSize){
-      		randMove = random(5);
+      		randMove = random(6);
       		delay(50); //need for prevent the same numbers
-      		randPow = random(2);
+      		randPow = random(3);
 
+          pos:
       		if(previousMove == randMove){
-      			randMove = random(5);
+      			randMove = random(6);
+            goto pos;
       		}
           if(needSpace == true){ // need for small displays
             scramble += moves[randMove] + ALG_POWES[randPow] + ' ';
