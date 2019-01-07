@@ -1,10 +1,10 @@
-/* 
+/*
 	* Need for make new scrambles
 */
 #include "Arduino.h"
 
 class Scrambles {
-  
+
   	int randMove = 0; //need to store random number -_-
   	int randPow = 0; //need to store random alg pow -_- x2
   	int previousMove,previousPow;
@@ -12,7 +12,7 @@ class Scrambles {
   	String moves[6] = {"R","L","U","D","F","B"};
   	String ALG_POWES[3] = {"","'","2"};
 
-	public: String getScramble(int scrSize){
+	public: String getScramble(int scrSize, boolean needSpace){
 		int previousIndex; //previous move
 		String scramble = "";
 
@@ -25,7 +25,12 @@ class Scrambles {
       		if(previousMove == randMove){
       			randMove = random(5);
       		}
-      		scramble += moves[randMove] + ALG_POWES[randPow] + ' ';
+          if(needSpace == true){ // need for small displays
+            scramble += moves[randMove] + ALG_POWES[randPow] + ' ';
+          } else {
+            scramble += moves[randMove] + ALG_POWES[randPow];
+          }
+
       		previousMove = randMove;
       		i++;
 		}
