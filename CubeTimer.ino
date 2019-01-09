@@ -24,9 +24,11 @@
 /* Misc definitions */
   #define firstButt 5
   #define secondButt 4
+  #define thirdButt 14
 
   GButton butt1(firstButt);
   GButton butt2(secondButt);
+  GButton resetButt(thirdButt);
 
   #define NODEMCU
 /* End */
@@ -39,37 +41,40 @@
 /* End */
 void setup() {
   Serial.begin(115200);
+  randomSeed(analogRead(0));
 
 #ifdef NODEMCU
   attachInterrupt(digitalPinToInterrupt(firstButt), isr, CHANGE);
   attachInterrupt(digitalPinToInterrupt(secondButt), isr, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(thirdButt), isr, CHANGE);
 #else
   attachInterrupt(firstButt, isr, CHANGE);
   attachInterrupt(secondButt, isr, CHANGE);
+  attachInterrupt(thirdButt, isr, CHANGE);
 #endif
   butt1.setDebounce(25);
   butt2.setDebounce(25);
+  resetButt.setDebounce(25);
 
   Wire.begin(SDA,SCL);
   lcd.begin();
   lcd.backlight();
+
+  lcd.setCursor(0,0);
 }
 
-void loop() {   
+void loop() { 
   if ( butt1.isPress() == true && butt2.isPress() == true ) {
-    if ( timerMode == 0) {
-      timerMode = 1;
-    } else {     
-      timerMode = 0;     
-    }
+    timerMode = !timerMode;
   }
-  
-  /*if(butt1.isDouble() == true){
+
+  if(resetButt.isPress() == true && timerMode != 1){
     msTime = 0;
     secTime = 0;
     minTime = 0;
     decMinTime = 0;
-  }*/
+    lcd.clear();
+    }
 
   if ( timerMode == 0 ) {
     prevTime= millis();
@@ -88,17 +93,13 @@ void loop() {
     prevTime= curentTime;
   }
 
-   if(minTime < 1){
-      Serial.print(secTime);Serial.print(".");Serial.println(msTime);
-   } else {
-      Serial.print(minTime);Serial.print(":");Serial.print(secTime);Serial.print(".");Serial.println(msTime);
-   }
-   
-    lcd.setCursor(0,0);
+   lcd.setCursor(0,1);
    if(minTime < 1){
       lcd.print(secTime);lcd.print(".");lcd.print(msTime);
+      Serial.print(secTime);Serial.print(".");Serial.println(msTime);
    } else {
       lcd.print(minTime);lcd.print(":");lcd.print(secTime);lcd.print(".");lcd.print(msTime);
+      Serial.print(minTime);Serial.print(":");Serial.print(secTime);Serial.print(".");Serial.println(msTime);
    }
    
 }
@@ -106,4 +107,5 @@ void loop() {
 void isr(){
   butt1.tick();
   butt2.tick();
+  resetButt.tick();
 }
