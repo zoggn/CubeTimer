@@ -13,24 +13,22 @@ class Scrambles {
   	String ALG_POWES[3] = {"","'","2"};
 
 	public: String getScramble(int scrSize, boolean needSpace){
-		int previousIndex; //previous move
 		String scramble = "";
 
 		int i = 0;
 		while(i < scrSize){
-      		randMove = random(6);
-      		delay(50); //need for prevent the same numbers
       		randPow = random(3);
+      		delay(50); //need for prevent the same numbers
+        pos:
+      		randMove = random(6);
 
-          pos:
-      		if(previousMove == randMove){
-      			randMove = random(6);
+      		if(isInvalid(previousMove,randMove)){
             goto pos;
       		}
+
+          scramble += moves[randMove] + ALG_POWES[randPow];
           if(needSpace == true){ // need for small displays
-            scramble += moves[randMove] + ALG_POWES[randPow] + ' ';
-          } else {
-            scramble += moves[randMove] + ALG_POWES[randPow];
+            scramble += ' ';
           }
 
       		previousMove = randMove;
@@ -39,5 +37,25 @@ class Scrambles {
 
 		return scramble;
 	}
+
+private: boolean isInvalid(int prev, int current){
+if(prev == current){
+    return true;
+  } else if(prev == 0 && current == prev + 1){
+    return true;
+  } else if(prev == 1 && current == prev - 1){
+    return true;
+  } else if(prev == 2 && current == prev + 1){
+    return true;
+  } else if(prev == 3 && current == prev - 1){
+    return true;
+  } else if(prev == 4 && current == prev + 1){
+    return true;
+  } else if(prev == 5 && current == prev - 1){
+    return true;
+  } else {
+    return false;
+  }
+}
 
 };
