@@ -19,11 +19,10 @@ class Scrambles {
 		while(i < scrSize){
       		randPow = random(3);
       		delay(50); //need for prevent the same numbers
-        pos:
       		randMove = random(6);
 
       		if(isInvalid(previousMove,randMove)){
-            goto pos;
+            	   continue;
       		}
 
           scramble += moves[randMove] + ALG_POWES[randPow];
